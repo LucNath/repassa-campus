@@ -6,7 +6,7 @@ Marketplace de economia circular criado para aproximar estudantes que querem ven
 
 - Vitrine pública com busca e filtros por categoria;
 - cadastro de venda ou doação com validação;
-- área “Meus anúncios” e exclusão de itens;
+- área "Meus anúncios" com edição e exclusão de itens;
 - cadastro, login e sessão JWT com senha protegida por hash;
 - autorização para editar ou excluir apenas anúncios próprios;
 - estatísticas obtidas da API;
@@ -20,7 +20,7 @@ Marketplace de economia circular criado para aproximar estudantes que querem ven
 - Backend: Node.js, Fastify, Zod, JWT, bcrypt e TypeScript;
 - Dados: SQLite com `better-sqlite3`;
 - Qualidade: Vitest, React Testing Library, jsdom e TypeScript em modo estrito;
-- Organização: npm workspaces (monorepo).
+- Organização: npm workspaces em monorepo.
 
 ## Como executar
 
@@ -41,9 +41,25 @@ npm run typecheck
 npm run build
 ```
 
-O comando `npm test` executa os testes de integração da API e os testes de comportamento da interface. No frontend, a API é simulada para verificar filtros, anúncios próprios, vendas, doações, exclusões, estatísticas e estados de erro sem depender de um servidor aberto.
+O comando `npm test` executa os testes de integração da API e os testes de comportamento da interface. No frontend, a API é simulada para verificar filtros, anúncios próprios, vendas, doações, edições, exclusões, estatísticas e estados de erro sem depender de um servidor aberto.
 
-Variáveis opcionais podem ser copiadas de `.env.example`. Em produção, configure `VITE_API_URL` antes do build do frontend.
+Variáveis opcionais podem ser copiadas de `.env.example`.
+
+## Deploy
+
+O projeto está preparado para publicar frontend e API separadamente:
+
+- `vercel.json` configura o build do app Vite em monorepo;
+- `render.yaml` configura a API Node.js no Render;
+- `docs/DEPLOY.md` traz o passo a passo e as variáveis de produção.
+
+Em produção, configure:
+
+```text
+VITE_API_URL=https://sua-api-publica
+CORS_ORIGIN=https://seu-front-publico
+JWT_SECRET=uma-chave-longa-e-segura
+```
 
 ## API REST
 
@@ -66,20 +82,20 @@ Detalhes da arquitetura, decisões e formato dos dados estão em [docs/ARCHITECT
 
 ### Ferramentas utilizadas
 
-- OpenAI Codex: análise do edital, definição da arquitetura, implementação inicial, documentação e revisão automatizada.
+- OpenAI Codex: análise do edital, definição da arquitetura, implementação, documentação, testes, autenticação e preparação de deploy.
 
 ### Estratégia de engenharia de prompts
 
 Prompts reais usados no projeto devem ser preservados aqui. O primeiro prompt foi:
 
-> “vamos analisar, criar docs do projeto e começar a implementar” acompanhado do edital completo em PDF.
+> "vamos analisar, criar docs do projeto e começar a implementar" acompanhado do edital completo em PDF.
 
-Esse pedido foi refinado operacionalmente em três objetivos: rastrear cada requisito do edital, escolher uma arquitetura simples de explicar no vídeo e entregar uma fatia vertical verificável (banco → API → interface → PWA).
+Esse pedido foi refinado operacionalmente em três objetivos: rastrear cada requisito do edital, escolher uma arquitetura simples de explicar no vídeo e entregar uma fatia vertical verificável: banco, API, interface e PWA.
 
-Exemplos sugeridos para registrar nas próximas sessões (substitua pelos prompts reais quando usados):
+Exemplos sugeridos para registrar nas próximas sessões:
 
-1. “Revise o Service Worker desta PWA considerando cache de assets e respostas da API. Aponte riscos de dados obsoletos e proponha uma estratégia simples que funcione offline.”
-2. “Analise os testes da API Fastify e identifique cenários ausentes para validação, filtro e autorização por usuário, sem alterar o contrato atual.”
+1. "Revise o Service Worker desta PWA considerando cache de assets e respostas da API. Aponte riscos de dados obsoletos e proponha uma estratégia simples que funcione offline."
+2. "Analise os testes da API Fastify e identifique cenários ausentes para validação, filtro e autorização por usuário, sem alterar o contrato atual."
 
 ### Compartilhamento de histórico
 
@@ -87,14 +103,14 @@ Adicione aqui um link público da conversa de desenvolvimento, caso a ferramenta
 
 ### Reflexão crítica
 
-Na primeira implementação, a IA precisa ser tratada como autora de uma proposta, não como fonte de verdade. Um exemplo concreto desta sessão foi a tentativa inicial de extrair o PDF com uma ferramenta (`pdftotext`) que não existia no ambiente. O erro foi identificado pela saída do terminal; a abordagem foi corrigida usando uma biblioteca Python pequena e validando manualmente o texto extraído antes de definir o escopo. Ao longo do projeto, esta seção deve receber também exemplos de decisões de código revisadas pelo candidato.
+Na primeira implementação, a IA precisa ser tratada como autora de uma proposta, não como fonte de verdade. Um exemplo concreto desta sessão foi a tentativa inicial de extrair o PDF com uma ferramenta que não existia no ambiente. O erro foi identificado pela saída do terminal; a abordagem foi corrigida e validada antes de definir o escopo.
 
-> Importante: leia, execute e compreenda cada fluxo antes da entrega. O vídeo exigido no edital deve demonstrar domínio técnico e autoria; personalize este diário com suas decisões e aprendizados reais durante os 15 dias.
+Ao longo do projeto, esta seção deve receber também exemplos de decisões de código revisadas pelo candidato.
 
 ## Próximas entregas
 
-- upload de imagens em vez de somente URL;
-- testes de interface e auditoria Lighthouse;
+- Upload de imagens em vez de somente URL;
+- auditoria Lighthouse;
 - deploy da API e frontend;
 - roteiro e gravação do vídeo de até seis minutos.
 

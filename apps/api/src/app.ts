@@ -24,9 +24,13 @@ const credentialsSchema = z.object({
 const registerSchema = credentialsSchema.extend({ name: z.string().trim().min(2).max(80) });
 type AuthUser = { id: string; name: string; email: string };
 
+function allowedOrigins() {
+  return process.env.CORS_ORIGIN?.split(',').map(origin => origin.trim()).filter(Boolean) ?? true;
+}
+
 export function buildApp(repository: ListingRepository = createDatabase()) {
   const app = Fastify({ logger: process.env.NODE_ENV !== 'test' });
-  app.register(cors, { origin: true });
+  app.register(cors, { origin: allowedOrigins() });
   app.register(jwt, { secret: process.env.JWT_SECRET ?? 'repassa-local-development-secret' });
   const authenticate = (request: FastifyRequest) => request.jwtVerify<{ sub: string; name: string; email: string }>();
   const session = (user: AuthUser) => ({ token: app.jwt.sign({ name: user.name, email: user.email }, { sub: user.id, expiresIn: '7d' }), user });
