@@ -1,0 +1,13 @@
+{
+  "name": "repassa-campus",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c yellow,cyan \"npm run dev -w @repassa/api\" \"npm run dev -w @repassa/web\"",
+    "build": "npm run build -w @repassa/api && npm run build -w @repassa/web",
+    "test": "npm run test -w @repassa/api && npm run test -w @repassa/web",
+    "typecheck": "npm run typecheck -w @repassa/api && npm run typecheck -w @repassa/web"
+  },
+  "devDependencies": { "concurrently": "^9.2.1" }
+}

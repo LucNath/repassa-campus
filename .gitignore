@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+coverage/
+PS_Full_Stack.pdf
+*.tsbuildinfo
