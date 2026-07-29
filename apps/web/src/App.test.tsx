@@ -9,6 +9,7 @@ vi.mock('./api', () => ({
     listings: vi.fn(),
     stats: vi.fn(),
     create: vi.fn(),
+    update: vi.fn(),
     remove: vi.fn(),
     getSession: vi.fn(),
     login: vi.fn(),
@@ -29,6 +30,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(api.listings).mockResolvedValue(listings);
   vi.mocked(api.stats).mockResolvedValue(initialStats);
+  vi.mocked(api.create).mockImplementation(async input => ({ id: 4, userId: 'estudante-demo', createdAt: '2026-07-22', ...input }));
+  vi.mocked(api.update).mockImplementation(async (_id, input) => ({ ...listings[1], ...input }));
   vi.mocked(api.remove).mockResolvedValue();
   vi.mocked(api.getSession).mockReturnValue({ token: 'token-test', user: { id: 'estudante-demo', name: 'Estudante', email: 'estudante@unifor.br' } });
   vi.stubGlobal('confirm', vi.fn(() => true));
@@ -109,6 +112,29 @@ describe('Repassa Campus', () => {
     await user.click(screen.getByRole('button', { name: 'Publicar anúncio' }));
 
     await waitFor(() => expect(api.create).toHaveBeenCalledWith(expect.objectContaining({ price: null, isDonation: true })));
+  });
+
+  it('edita um anúncio próprio e atualiza a listagem', async () => {
+    const user = userEvent.setup();
+    const updated: Listing = { ...listings[1], title: 'Teclado revisado', price: 75 };
+    vi.mocked(api.update).mockResolvedValue(updated);
+    render(<App />);
+    await screen.findByText('Livro de Cálculo');
+
+    await user.click(screen.getByRole('button', { name: 'Meus anúncios' }));
+    await user.click(screen.getByRole('button', { name: 'Editar' }));
+    expect(screen.getByText('Editar anúncio.')).toBeInTheDocument();
+
+    await user.clear(screen.getByLabelText('Título'));
+    await user.type(screen.getByLabelText('Título'), updated.title);
+    await user.clear(screen.getByLabelText('Preço (R$)'));
+    await user.type(screen.getByLabelText('Preço (R$)'), '75');
+    await user.click(screen.getByRole('button', { name: 'Salvar alterações' }));
+
+    expect(api.update).toHaveBeenCalledWith(2, expect.objectContaining({ title: updated.title, price: 75 }));
+    expect(await screen.findByText('Anúncio atualizado.')).toBeInTheDocument();
+    expect(screen.getByText(updated.title)).toBeInTheDocument();
+    expect(screen.queryByText('Teclado mecânico')).not.toBeInTheDocument();
   });
 
   it('exclui um anúncio próprio e atualiza as estatísticas', async () => {
