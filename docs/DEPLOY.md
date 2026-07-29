@@ -68,3 +68,17 @@ CORS_ORIGIN=https://app.vercel.app,http://localhost:5173
 - Editar um anuncio proprio.
 - Excluir um anuncio proprio.
 - Recarregar a pagina e confirmar que a sessao continua ativa.
+
+Tambem e possivel validar o basico pelo terminal:
+
+```bash
+API_URL=https://repassa-campus-api.onrender.com WEB_URL=https://repassa-campus.vercel.app npm run smoke:deploy
+```
+
+No PowerShell:
+
+```powershell
+$env:API_URL="https://repassa-campus-api.onrender.com"
+$env:WEB_URL="https://repassa-campus.vercel.app"
+npm run smoke:deploy
+```

@@ -7,7 +7,8 @@
     "dev": "concurrently -n API,WEB -c yellow,cyan \"npm run dev -w @repassa/api\" \"npm run dev -w @repassa/web\"",
     "build": "npm run build -w @repassa/api && npm run build -w @repassa/web",
     "test": "npm run test -w @repassa/api && npm run test -w @repassa/web",
-    "typecheck": "npm run typecheck -w @repassa/api && npm run typecheck -w @repassa/web"
+    "typecheck": "npm run typecheck -w @repassa/api && npm run typecheck -w @repassa/web",
+    "smoke:deploy": "node scripts/smoke-deploy.mjs"
   },
   "devDependencies": { "concurrently": "^9.2.1" }
 }
