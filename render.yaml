@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     rootDir: .
-    buildCommand: npm ci && npm run build -w @repassa/api
+    buildCommand: npm ci --include=dev && npm run build -w @repassa/api
     startCommand: npm run start -w @repassa/api
     healthCheckPath: /health
     envVars:

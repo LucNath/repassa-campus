@@ -15,7 +15,7 @@ Este projeto foi preparado para deploy com frontend e API separados:
 
 O blueprint ja define:
 
-- Build: `npm ci && npm run build -w @repassa/api`
+- Build: `npm ci --include=dev && npm run build -w @repassa/api`
 - Start: `npm run start -w @repassa/api`
 - Health check: `/health`
 - Banco SQLite em `./data/repassa.db`
